@@ -16,7 +16,8 @@ module Smtping
   BATCH_MAX = 1_000
   CHECKS = %w[spamtrap disposable spambot complainer].freeze
   SAFE = %w[valid alias].freeze
-  AVOID = %w[invalid spamtrap disposable blacklisted complainer spambot inbox_full].freeze
+  AVOID = %w[invalid spamtrap disposable blacklisted complainer spambot inbox_full no_reply].freeze
+  BANDS = %w[safe avoid judgement].freeze
   EMAIL_RE = /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/.freeze
 
   # "safe" (send), "avoid" (remove) or "judgement" (your call).
@@ -25,6 +26,11 @@ module Smtping
     return "avoid" if AVOID.include?(status)
 
     "judgement"
+  end
+
+  # The band decided by the API, or derived from the status when the result has none.
+  def self.band_of(result)
+    BANDS.include?(result["band"]) ? result["band"] : band(result["status"])
   end
 
   def self.email?(value)

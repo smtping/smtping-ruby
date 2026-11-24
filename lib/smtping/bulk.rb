@@ -29,7 +29,7 @@ module Smtping
       data = data["results"] if data.is_a?(Hash) && data.key?("results")
       return [] unless data.is_a?(Array)
 
-      data.map { |r| r.merge("band" => Smtping.band(r["status"])) }
+      data.map { |r| r.merge("band" => Smtping.band_of(r)) }
     end
 
     # Poll until the job succeeds, then return its results. The block, if any, receives each job status.
