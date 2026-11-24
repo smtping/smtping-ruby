@@ -132,7 +132,7 @@ module Smtping
 
     def with_band(result)
       r = result.is_a?(Hash) ? result : {}
-      r.merge("band" => Smtping.band(r["status"]))
+      r.merge("band" => Smtping.band_of(r))
     end
 
     def parse(text)
